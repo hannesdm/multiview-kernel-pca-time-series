@@ -1,0 +1,4 @@
+# @package data
+_target_: srcs.data_loader.data_loaders.appliances_energy_Dataloader
+data_dir: ${hydra:runtime.cwd}/datasets
+#max_nr: 1000  # default: 5000

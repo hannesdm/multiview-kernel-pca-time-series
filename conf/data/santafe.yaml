@@ -1,0 +1,4 @@
+# @package data
+_target_: srcs.data_loader.data_loaders.santafe_Dataloader
+data_dir: ${hydra:runtime.cwd}/datasets
+training: true

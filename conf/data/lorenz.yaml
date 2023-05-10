@@ -1,0 +1,7 @@
+# @package data
+_target_: srcs.data_loader.data_loaders.lorenz_Dataloader
+plot3d: false
+max_nr: 4000
+s: 10
+r: 28
+b: 2.667

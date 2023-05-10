@@ -1,0 +1,2 @@
+# @package data
+_target_: srcs.data_loader.data_loaders.sine_sum_Dataloader

@@ -1,0 +1,96 @@
+name: parameter_search_nar
+
+log_dir: ${name}
+
+arch:
+  _target_: srcs.model.MV_RKM_nar.Multiview_RKM_NAR
+
+defaults:
+  - data: santafe
+
+hparam_search_metric: srcs.model.metric.MSE  # For hyperparameter search
+
+metrics: # To evaluate the best model
+  - _target_: srcs.model.metric.MSE
+  - _target_: srcs.model.metric.MAE
+  - _target_: srcs.model.metric.huberloss
+
+# How many samples are drawn from the hyperparameter search space and executed
+num_experiments: 4
+ablation_study: false
+
+# comment out search_algorithm for random search
+# See https://docs.ray.io/en/latest/tune/api_docs/suggestion.html
+search_algorithm:
+  # ray.tune.suggest.hyperopt.HyperOptSearch # ray.tune.suggest.optuna.OptunaSearch # ray.tune.suggest.bayesopt.BayesOptSearch
+  _target_: ray.tune.suggest.hyperopt.HyperOptSearch
+  mode : min
+
+
+hyperparameters:
+  decomposition_method: # Options: ['eigen', 'svd']
+    _target_: ray.tune.choice
+    categories: ['eigen']
+  lag:
+    _target_ : ray.tune.randint
+#    categories: [10]
+    lower: 1
+    upper: 99
+  n_steps_ahead:
+    _target_ : ray.tune.choice
+    categories: [1]
+  s:
+    _target_ : ray.tune.randint
+    lower: 3
+    upper: 150
+#    categories: [3]
+
+  # For X view --------------------------------------------------------------
+  kernel_x:
+    _target_: ray.tune.choice
+    categories: ['rbf']
+  sigma_x:
+    _target_: ray.tune.quniform
+    # categories: [0.5, 1.0, 1.5, 2.0, 2.902, 3, 4]
+    lower: 0.1
+    upper: 10
+    q: 1e-4
+  center_K_x:
+    _target_: ray.tune.choice
+    categories: [True]  # Center kernel matrix.
+
+  # For Y (view) view --------------------------------------------------------
+  kernel_y:
+    _target_: ray.tune.choice
+    categories: ['rbf']
+  sigma_y:
+    _target_: ray.tune.quniform
+    # categories: [0.5986]
+    lower: 0.1
+    upper: 10
+    q: 1e-4
+  center_K_y:
+    _target_: ray.tune.choice
+    categories: [True]  # Center kernel matrix.
+
+  # Pre-image method settings ------------------------------------------------
+  pre_image_method:
+    _target_: ray.tune.choice
+    categories: ['kernel_smoother'] # ['ridge_regression','kernel_smoother']
+  # kernel smoother preimage parameters:
+  nearest_neighbours:
+    _target_: ray.tune.choice
+    categories: [1]
+#    lower: 1
+#    upper: 100
+
+  # kernel ridge regression preimage parameters:
+#  ridge_regression_alpha:
+#    _target_: ray.tune.choice
+#    categories: [0.0001]
+#  ridge_regression_rbf_sigma:
+#    _target_: ray.tune.uniform
+##    categories: [ 1.0 ]
+#    lower: 0.1
+#    upper: 500
+

@@ -1,0 +1,41 @@
+log_dir: ${name}/
+resume:
+verbose: True  # For various plots during training
+
+metrics:
+  - _target_: srcs.model.metric.MSE
+  - _target_: srcs.model.metric.MAE
+
+
+defaults:
+  - data: santafe # sine, sine_sum, santafe, lorenz, gas_turbine, chickenpox, appliances_energy
+  - model: MV_RKM_nar
+
+
+mode: x_to_y
+hyperparameters:
+
+  decomposition_method: 'eigen'  # Options: ['eigen', 'svd']
+  lag: 70 # Time series lag.
+  n_steps_ahead: 1  # `n` step-ahead prediction
+  s: 144    # Number of components.
+
+  # For X view --------------------------------------------------------------
+  kernel_x: 'rbf'
+  sigma_x:  2.1856  # RBF kernel parameter.
+  center_K_x: True  # Center kernel matrix.
+
+  # For Y (view) view --------------------------------------------------------
+  kernel_y: 'linear'  # Options: ['rbf', 'linear']
+  sigma_y: 0.1925 # RBF kernel parameter.
+  center_K_y: True # Center kernel matrix.
+
+  # Pre-image method settings ------------------------------------------------
+  pre_image_method: 'kernel_smoother'
+  nearest_neighbours: 9
+
+#  Kernel Ridge Regression example for santafe: Change kernel_y to rbf,  below alpha = 0.0001 and sigma: 8
+#  pre_image_method: 'ridge_regression'
+#  ridge_regression_alpha: 0.0001
+#  ridge_regression_rbf_sigma: 8
+

@@ -1,0 +1,26 @@
+name: rrkm_env
+channels:
+  - https://repo.anaconda.com/pkgs/free
+  - anaconda
+  - pytorch
+  - conda-forge
+  - soumith
+  - defaults
+dependencies:
+  - pip=22.0.4
+  - python=3.7.9
+  - matplotlib=3.3.1
+  - pytorch=1.9.0
+  - tensorflow=2.9.1
+  - pip:
+    - hydra-core==1.1.1
+    - omegaconf==2.1.1
+    - numpy==1.21.5
+    - scikit_learn==1.0.2
+    - tqdm==4.63.1
+    - "ray[air]"
+    - "ray[tune]"
+    - "ray[rllib]"
+    - "ray[serve]"
+    - wget
+    - openml
